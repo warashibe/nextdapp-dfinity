@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "nxd": {
+      "main": "src/nxd/main.mo",
+      "type": "motoko"
+    },
+    "nxd_assets": {
+      "dependencies": [
+        "nxd"
+      ],
+      "frontend": {
+        "entrypoint": "src/nxd_assets/src/index.html"
+      },
+      "source": [
+        "src/nxd_assets/assets",
+        "dist/nxd_assets/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "dfx": "0.8.3",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
