@@ -1,6 +1,6 @@
 # NextDapp / DFINITY Integration
 
-This is a starter app to develop an DFINITY dapp with [NextDapp](https://warashibe.github.io/next-dapp/) framework.
+This is a starter app to develop a DFINITY dapp with [NextDapp](https://warashibe.github.io/next-dapp/) framework.
 
 [Our motoko smart contract](src/nxd/main.mo) extends the todo example from [this DFINITY tutorial](https://smartcontracts.org/docs/developers-guide/tutorials/multiple-actors.html).
 
@@ -30,4 +30,4 @@ dfx deploy
 yarn dev
 ```
 
-Now your app is running at [localhost:3000](http://localhost:3000).
+Now your dapp is running at [localhost:3000](http://localhost:3000).
