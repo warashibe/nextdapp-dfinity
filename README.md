@@ -28,4 +28,6 @@ yarn
 dfx start --background
 dfx deploy
 yarn dev
-``
+```
+
+Now your app is running at [localhost:3000](http://localhost:3000).
