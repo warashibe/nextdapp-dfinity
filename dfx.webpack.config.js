@@ -1,45 +1,43 @@
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
+const path = require("path")
+const webpack = require("webpack")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+const CopyPlugin = require("copy-webpack-plugin")
 
-let localCanisters, prodCanisters, canisters;
+let localCanisters, prodCanisters, canisters
 
 function initCanisterIds() {
   try {
-    localCanisters = require(path.resolve(".dfx", "local", "canister_ids.json"));
+    localCanisters = require(path.resolve(".dfx", "local", "canister_ids.json"))
   } catch (error) {
-    console.log("No local canister_ids.json found. Continuing production");
+    console.log("No local canister_ids.json found. Continuing production")
   }
   try {
-    prodCanisters = require(path.resolve("canister_ids.json"));
+    prodCanisters = require(path.resolve("canister_ids.json"))
   } catch (error) {
-    console.log("No production canister_ids.json found. Continuing with local");
+    console.log("No production canister_ids.json found. Continuing with local")
   }
 
   const network =
     process.env.DFX_NETWORK ||
-    (process.env.NODE_ENV === "production" ? "ic" : "local");
+    (process.env.NODE_ENV === "production" ? "ic" : "local")
 
-  canisters = network === "local" ? localCanisters : prodCanisters;
-
+  canisters = network === "local" ? localCanisters : prodCanisters
+  let env = {}
   for (const canister in canisters) {
     process.env[canister.toUpperCase() + "_CANISTER_ID"] =
-      canisters[canister][network];
+      canisters[canister][network]
+    env[canister.toUpperCase() + "_CANISTER_ID"] = canisters[canister][network]
   }
+  return env
 }
-initCanisterIds();
+initCanisterIds()
 
-const isDevelopment = process.env.NODE_ENV !== "production";
-const asset_entry = path.join(
-  "src",
-  "nxd_assets",
-  "src",
-  "index.html"
-);
+const isDevelopment = process.env.NODE_ENV !== "production"
+const asset_entry = path.join("src", "nxd_assets", "src", "index.html")
 
 module.exports = {
+  initCanisterIds,
   target: "web",
   mode: isDevelopment ? "development" : "production",
   entry: {
@@ -81,7 +79,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, asset_entry),
-      cache: false
+      cache: false,
     }),
     new CopyPlugin({
       patterns: [
@@ -92,8 +90,8 @@ module.exports = {
       ],
     }),
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development',
-      NXD_CANISTER_ID: canisters["nxd"]
+      NODE_ENV: "development",
+      NXD_CANISTER_ID: canisters["nxd"],
     }),
     new webpack.ProvidePlugin({
       Buffer: [require.resolve("buffer/"), "Buffer"],
@@ -113,6 +111,6 @@ module.exports = {
     },
     hot: true,
     contentBase: path.resolve(__dirname, "./src/nxd_assets"),
-    watchContentBase: true
+    watchContentBase: true,
   },
-};
+}

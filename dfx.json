@@ -5,16 +5,8 @@
       "type": "motoko"
     },
     "nxd_assets": {
-      "dependencies": [
-        "nxd"
-      ],
-      "frontend": {
-        "entrypoint": "src/nxd_assets/src/index.html"
-      },
-      "source": [
-        "src/nxd_assets/assets",
-        "dist/nxd_assets/"
-      ],
+      "dependencies": ["nxd"],
+      "source": ["out"],
       "type": "assets"
     }
   },

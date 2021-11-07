@@ -2,13 +2,20 @@
   "name": "nxd_assets",
   "version": "0.1.0",
   "description": "Internet Computer starter application",
-  "keywords": ["Internet Computer", "Motoko", "JavaScript", "Canister"],
+  "keywords": [
+    "Internet Computer",
+    "Motoko",
+    "JavaScript",
+    "Canister"
+  ],
   "scripts": {
-    "build": "webpack",
-    "prebuild": "npm run copy:types",
-    "start": "webpack serve --mode development --env development",
-    "prestart": "npm run copy:types",
-    "copy:types": "rsync -avr .dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --delete src/declarations"
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "next export",
+    "syncgencode": "DFX_NETWORK=local && npm run copy:types",
+    "copy:types": "rsync -avr .dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --delete ui/declarations"
   },
   "devDependencies": {
     "@dfinity/agent": "0.10.1",
@@ -23,14 +30,33 @@
     "stream-browserify": "3.0.0",
     "terser-webpack-plugin": "5.1.1",
     "util": "0.12.3",
+    "webpack": "5.24.4",
     "webpack-cli": "4.5.0",
-    "webpack-dev-server": "^3.11.2",
-    "webpack": "5.24.4"
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@rebass/forms": "^4.0.6",
+    "isomorphic-fetch": "^2.2.1",
+    "md5": "^2.3.0",
+    "next": "^11.0.1",
+    "next-offline": "^5.0.5",
+    "normalize.css": "^8.0.1",
+    "ramda": "^0.27.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rebass": "^4.0.7",
+    "recoil": "^0.0.10",
+    "stream-browserify": "^3.0.0"
   },
   "browserslist": [
     "last 2 chrome version",
     "last 2 firefox version",
     "last 2 safari version",
     "last 2 edge version"
-  ]
+  ],
+  "bit": {
+    "env": {},
+    "componentsDefaultDirectory": "nd/{name}",
+    "packageManager": "npm"
+  }
 }
