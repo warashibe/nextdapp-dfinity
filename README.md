@@ -18,3 +18,14 @@ await dfx("nxd").getTodos()
 That's it!
 
 Refer to [/pages/index.js](pages/index.js) for a super simple one page todo app.
+
+## How to run
+
+```bash
+git clone https://github.com/warashibe/nextdapp-dfinity.git
+cd nextdapp-dfinity
+yarn
+dfx start --background
+dfx deploy
+yarn dev
+``
