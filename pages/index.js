@@ -42,6 +42,7 @@ export default () => {
   const [task, setTask] = useState("")
   const [todos, setTodos] = useState([])
   const [processing, setProcessing] = useState(null)
+  const [adding, setAdding] = useState(false)
 
   useEffect(() => {
     ;(async () => setTodos(await dfx("todo").getTodos()))()
@@ -52,7 +53,7 @@ export default () => {
       <Box maxWidth="600px" p={3}>
         <Flex mb={2}>
           <Input
-            disabled={processing ? "disabled" : ""}
+            disabled={adding ? "disabled" : ""}
             value={task}
             onChange={e => setTask(e.target.value)}
             flex={1}
@@ -60,16 +61,16 @@ export default () => {
           <Flex
             sx={style.add}
             onClick={async () => {
-              if (!processing && !/^\s*$/.test(task)) {
-                setProcessing(true)
+              if (!adding && !/^\s*$/.test(task)) {
+                setAdding(true)
                 await dfx("todo").addTodo(task)
                 setTodos(await dfx("todo").getTodos())
                 setTask("")
-                setProcessing(false)
+                setAdding(false)
               }
             }}
           >
-            {processing ? (
+            {adding ? (
               <Box as="i" className="fas fa-spin fa-circle-notch" />
             ) : (
               <Box as="i" className="fas fa-plus" />
