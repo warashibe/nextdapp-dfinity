@@ -3,7 +3,10 @@ const webpack = require("webpack")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const CopyPlugin = require("copy-webpack-plugin")
-
+const { pickBy, propEq, compose, keys } = require("ramda")
+const ic = require(path.resolve(__dirname, "dfx.json")).canisters
+const id = compose(keys, pickBy(propEq("type", "motoko")))(ic)[0]
+const asset_id = compose(keys, pickBy(propEq("type", "assets")))(ic)[0]
 let localCanisters, prodCanisters, canisters
 
 function initCanisterIds() {
@@ -34,7 +37,7 @@ function initCanisterIds() {
 initCanisterIds()
 
 const isDevelopment = process.env.NODE_ENV !== "production"
-const asset_entry = path.join("src", "nxd_assets", "src", "index.html")
+const asset_entry = path.join("src", asset_id, "src", "index.html")
 
 module.exports = {
   initCanisterIds,
@@ -62,7 +65,7 @@ module.exports = {
   },
   output: {
     filename: "index.js",
-    path: path.join(__dirname, "dist", "nxd_assets"),
+    path: path.join(__dirname, "dist", asset_id),
   },
 
   // Depending in the language or framework you are using for
@@ -84,14 +87,14 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.join(__dirname, "src", "nxd_assets", "assets"),
-          to: path.join(__dirname, "dist", "nxd_assets"),
+          from: path.join(__dirname, "src", asset_id, "assets"),
+          to: path.join(__dirname, "dist", asset_id),
         },
       ],
     }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: "development",
-      NXD_CANISTER_ID: canisters["nxd"],
+      [`${id.toUpperCase()}_CANISTER_ID`]: canisters[id],
     }),
     new webpack.ProvidePlugin({
       Buffer: [require.resolve("buffer/"), "Buffer"],
@@ -110,7 +113,7 @@ module.exports = {
       },
     },
     hot: true,
-    contentBase: path.resolve(__dirname, "./src/nxd_assets"),
+    contentBase: path.resolve(__dirname, `./src/${asset_id}`),
     watchContentBase: true,
   },
 }

@@ -1,11 +1,11 @@
 {
   "canisters": {
-    "nxd": {
-      "main": "src/nxd/main.mo",
+    "todo": {
+      "main": "src/todo/main.mo",
       "type": "motoko"
     },
-    "nxd_assets": {
-      "dependencies": ["nxd"],
+    "todo_assets": {
+      "dependencies": ["todo"],
       "source": ["out"],
       "type": "assets"
     }
