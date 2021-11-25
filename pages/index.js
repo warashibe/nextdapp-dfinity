@@ -52,7 +52,7 @@ export default () => {
       <Box maxWidth="600px" p={3}>
         <Flex mb={2}>
           <Input
-            disabled={adding ? "disabled" : ""}
+            disabled={processing ? "disabled" : ""}
             value={task}
             onChange={e => setTask(e.target.value)}
             flex={1}
@@ -60,16 +60,16 @@ export default () => {
           <Flex
             sx={style.add}
             onClick={async () => {
-              if (!adding && !/^\s*$/.test(task)) {
-                setAdding(true)
+              if (!processing && !/^\s*$/.test(task)) {
+                setProcessing(true)
                 await dfx("todo").addTodo(task)
                 setTodos(await dfx("todo").getTodos())
                 setTask("")
-                setAdding(false)
+                setProcessing(false)
               }
             }}
           >
-            {adding ? (
+            {processing ? (
               <Box as="i" className="fas fa-spin fa-circle-notch" />
             ) : (
               <Box as="i" className="fas fa-plus" />
