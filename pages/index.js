@@ -46,7 +46,7 @@ export default () => {
   const [adding, setAdding] = useState(false)
 
   useEffect(() => {
-    ;(async () => setTodos(await dfx("nxd").getTodos()))()
+    ;(async () => setTodos(await dfx("todo").getTodos()))()
   }, [])
 
   return (
@@ -64,8 +64,8 @@ export default () => {
             onClick={async () => {
               if (!adding && !/^\s*$/.test(task)) {
                 setAdding(true)
-                await dfx("nxd").addTodo(task)
-                setTodos(await dfx("nxd").getTodos())
+                await dfx("todo").addTodo(task)
+                setTodos(await dfx("todo").getTodos())
                 setTask("")
                 setAdding(false)
               }
@@ -85,8 +85,8 @@ export default () => {
               sx={style.task}
               onClick={async () => {
                 if (!v.completed) {
-                  await dfx("nxd").markDone(v.id)
-                  setTodos(await dfx("nxd").getTodos())
+                  await dfx("todo").markDone(v.id)
+                  setTodos(await dfx("todo").getTodos())
                 }
               }}
             >
@@ -103,8 +103,8 @@ export default () => {
               onClick={async () => {
                 if (isNil(deleting)) {
                   setDeleting(v.id)
-                  await dfx("nxd").removeTodo(v.id)
-                  setTodos(await dfx("nxd").getTodos())
+                  await dfx("todo").removeTodo(v.id)
+                  setTodos(await dfx("todo").getTodos())
                   setDeleting(null)
                 }
               }}
