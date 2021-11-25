@@ -41,9 +41,7 @@ const style = {
 export default () => {
   const [task, setTask] = useState("")
   const [todos, setTodos] = useState([])
-  const [deleting, setDeleting] = useState(null)
-  const [checking, setChecking] = useState(null)
-  const [adding, setAdding] = useState(false)
+  const [processing, setProcessing] = useState(null)
 
   useEffect(() => {
     ;(async () => setTodos(await dfx("todo").getTodos()))()
@@ -85,8 +83,10 @@ export default () => {
               sx={style.task}
               onClick={async () => {
                 if (!v.completed) {
+                  setProcessing(v.id)
                   await dfx("todo").markDone(v.id)
                   setTodos(await dfx("todo").getTodos())
+                  setProcessing(null)
                 }
               }}
             >
@@ -101,15 +101,15 @@ export default () => {
               width="50px"
               sx={style.remove}
               onClick={async () => {
-                if (isNil(deleting)) {
-                  setDeleting(v.id)
+                if (isNil(processing)) {
+                  setProcessing(v.id)
                   await dfx("todo").removeTodo(v.id)
                   setTodos(await dfx("todo").getTodos())
-                  setDeleting(null)
+                  setProcessing(null)
                 }
               }}
             >
-              {deleting === v.id ? (
+              {processing === v.id ? (
                 <Box as="i" className="fas fa-spin fa-circle-notch" />
               ) : (
                 <Box as="i" className="fas fa-times" />
