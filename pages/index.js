@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { map } from "ramda"
+import { isNil, map } from "ramda"
 import { bind } from "nd"
 import { Box, Flex } from "rebass"
 import { Input } from "@rebass/forms"
@@ -39,6 +39,9 @@ const style = {
 export default () => {
   const [task, setTask] = useState("")
   const [todos, setTodos] = useState([])
+  const [deleting, setDeleting] = useState(null)
+  const [checking, setChecking] = useState(null)
+  const [adding, setAdding] = useState(false)
 
   useEffect(() => {
     ;(async () => setTodos(await dfx("nxd").getTodos()))()
@@ -49,6 +52,7 @@ export default () => {
       <Box maxWidth="600px" p={3}>
         <Flex mb={2}>
           <Input
+            disabled={adding ? "disabled" : ""}
             value={task}
             onChange={e => setTask(e.target.value)}
             flex={1}
@@ -56,14 +60,20 @@ export default () => {
           <Flex
             sx={style.add}
             onClick={async () => {
-              if (!/^\s*$/.test(task)) {
+              if (!adding && !/^\s*$/.test(task)) {
+                setAdding(true)
                 await dfx("nxd").addTodo(task)
                 setTodos(await dfx("nxd").getTodos())
                 setTask("")
+                setAdding(false)
               }
             }}
           >
-            Add
+            {adding ? (
+              <Box as="i" className="fas fa-spin fa-circle-notch" />
+            ) : (
+              <Box as="i" className="fas fa-plus" />
+            )}
           </Flex>
         </Flex>
         {map(v => (
@@ -86,13 +96,22 @@ export default () => {
               </Box>
             </Box>
             <Flex
+              width="50px"
               sx={style.remove}
               onClick={async () => {
-                await dfx("nxd").removeTodo(v.id)
-                setTodos(await dfx("nxd").getTodos())
+                if (isNil(deleting)) {
+                  setDeleting(v.id)
+                  await dfx("nxd").removeTodo(v.id)
+                  setTodos(await dfx("nxd").getTodos())
+                  setDeleting(null)
+                }
               }}
             >
-              x
+              {deleting === v.id ? (
+                <Box as="i" className="fas fa-spin fa-circle-notch" />
+              ) : (
+                <Box as="i" className="fas fa-times" />
+              )}
             </Flex>
           </Flex>
         ))(todos)}
